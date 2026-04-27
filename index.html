@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Guilherme Eustaquio — Dev & Officer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#060b12;--surface:#0c1320;--surface2:#101b2c;
+  --border:rgba(0,200,255,.1);--border2:rgba(0,200,255,.2);
+  --accent:#00c8ff;--accent2:#0055ff;
+  --gold:#c9a227;--green:#3cffa0;
+  --text:#dde6f0;--muted:#566275;--muted2:#8fa0b8;
+  --glow:0 0 22px rgba(0,200,255,.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden;cursor:none;}
+#cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,background .2s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,200,255,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;}
+.cursor-hover #cursor{transform:translate(-50%,-50%) scale(2.5);background:rgba(0,200,255,.3);}
+.cursor-hover #cursor-ring{width:50px;height:50px;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:2px;}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));z-index:200;width:0%;transition:width .1s;}
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,200,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(6,11,18,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);letter-spacing:.05em;}
+.nav-logo span{color:var(--text);}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-decoration:none;letter-spacing:.1em;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
+.lang-toggle{display:flex;align-items:center;gap:.3rem;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:.2rem .4rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.68rem;}
+.lang-btn{padding:.2rem .5rem;border-radius:20px;color:var(--muted);transition:all .2s;}
+.lang-btn.active{background:var(--accent);color:var(--bg);font-weight:600;}
+section{position:relative;z-index:1;}
+.section-inner{max-width:1200px;margin:0 auto;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.2em;display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);max-width:100px;}
+h2.section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,4vw,3rem);line-height:1.1;margin-bottom:2.5rem;}
+#hero{min-height:100vh;display:flex;align-items:center;padding:0 5%;padding-top:80px;overflow:hidden;}
+.hero-inner{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4rem;width:100%;max-width:1200px;margin:0 auto;}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent);letter-spacing:.12em;background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.18);padding:.32rem .8rem;border-radius:30px;margin-bottom:1.25rem;}
+.hero-tag::before{content:'>';margin-right:.2rem;opacity:.6;}
+h1.hero-name{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,6vw,5.5rem);line-height:1.05;letter-spacing:-.02em;margin-bottom:.7rem;}
+h1.hero-name .line2{color:transparent;-webkit-text-stroke:1px rgba(0,200,255,.45);}
+.hero-title{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--muted);margin-bottom:1.4rem;height:1.4em;}
+.hero-title .typed{color:var(--accent);}
+.hero-desc{max-width:520px;font-size:.98rem;color:var(--muted2);line-height:1.85;margin-bottom:2rem;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.5rem;border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:.84rem;letter-spacing:.04em;cursor:pointer;text-decoration:none;transition:all .25s;border:none;}
+.btn-primary{background:var(--accent);color:var(--bg);box-shadow:0 0 20px rgba(0,200,255,.25);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:var(--glow);}
+.btn-outline{background:transparent;color:var(--accent);border:1px solid rgba(0,200,255,.35);}
+.btn-outline:hover{background:rgba(0,200,255,.07);border-color:var(--accent);transform:translateY(-2px);}
+.hero-photo{width:260px;height:310px;border-radius:14px;border:1px solid rgba(0,200,255,.18);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:var(--muted);position:relative;overflow:hidden;box-shadow:0 0 50px rgba(0,200,255,.07);flex-shrink:0;cursor:pointer;}
+.hero-photo::before{content:'';position:absolute;top:-100%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scanLine 4s linear infinite;}
+@keyframes scanLine{0%{top:-2px}100%{top:100%}}
+.hero-photo svg{width:56px;height:56px;opacity:.25;}
+.photo-hint{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.1em;opacity:.35;text-align:center;padding:0 1rem;}
+.hero-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:14px;display:none;}
+.hero-photo img.loaded{display:block;}
+.corner{position:absolute;width:14px;height:14px;}
+.corner-tl{top:8px;left:8px;border-top:1px solid var(--accent);border-left:1px solid var(--accent);}
+.corner-tr{top:8px;right:8px;border-top:1px solid var(--accent);border-right:1px solid var(--accent);}
+.corner-bl{bottom:8px;left:8px;border-bottom:1px solid var(--accent);border-left:1px solid var(--accent);}
+.corner-br{bottom:8px;right:8px;border-bottom:1px solid var(--accent);border-right:1px solid var(--accent);}
+.status-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--green);background:rgba(60,255,160,.06);border:1px solid rgba(60,255,160,.18);padding:.22rem .6rem;border-radius:20px;margin-bottom:.9rem;}
+.status-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse2 2s infinite;}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+#about{padding:7rem 5%;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.about-text p{color:var(--muted2);line-height:1.9;margin-bottom:1.2rem;font-size:.97rem;}
+.about-text p strong{color:var(--text);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.3rem;transition:all .25s;position:relative;overflow:hidden;}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.3);}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;color:var(--accent);display:block;line-height:1;margin-bottom:.3rem;}
+.stat-label{font-size:.78rem;color:var(--muted);line-height:1.3;}
+#skills{padding:5rem 5%;}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.25rem;margin-top:2rem;}
+.skill-category{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.6rem;transition:all .3s;}
+.skill-category:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 35px rgba(0,0,0,.25);}
+.skill-cat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:.55rem;margin-bottom:1.1rem;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.45rem;}
+.skill-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.28rem .65rem;border-radius:5px;background:rgba(0,200,255,.05);border:1px solid rgba(0,200,255,.12);color:#a0bcd4;transition:all .2s;cursor:default;}
+.skill-tag:hover{background:rgba(0,200,255,.12);color:var(--accent);transform:translateY(-1px);}
+.skill-tag.learning{background:rgba(201,162,39,.06);border-color:rgba(201,162,39,.2);color:var(--gold);}
+.cyber-badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.63rem;color:var(--accent);background:rgba(0,200,255,.06);border:1px solid rgba(0,200,255,.18);padding:.18rem .55rem;border-radius:20px;margin-bottom:.9rem;font-family:'JetBrains Mono',monospace;}
+#softskills{padding:7rem 5%;background:linear-gradient(180deg,transparent,rgba(0,85,255,.03),transparent);}
+.softskills-intro{max-width:620px;color:var(--muted2);font-size:.97rem;line-height:1.8;margin-bottom:2.5rem;}
+.radar-wrap{display:flex;justify-content:center;margin-bottom:3rem;}
+#radarChart{max-width:400px;width:100%;}
+.softskills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
+.soft-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem 1.75rem;transition:all .35s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.8rem;}
+.soft-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.soft-card:hover{border-color:rgba(0,200,255,.25);transform:translateY(-6px);box-shadow:0 20px 45px rgba(0,0,0,.35);}
+.soft-card:hover::after{transform:scaleX(1);}
+.soft-icon{font-size:2rem;line-height:1;}
+.soft-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
+.soft-desc{font-size:.85rem;color:var(--muted2);line-height:1.7;}
+.soft-origin{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);margin-top:.25rem;letter-spacing:.08em;}
+.soft-origin span.accent{color:var(--accent);opacity:.8;}
+#experience{padding:7rem 5%;}
+.timeline{position:relative;padding-left:2rem;margin-top:2rem;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--accent),rgba(0,200,255,.05));}
+.tl-item{position:relative;margin-bottom:2.5rem;padding-left:1.75rem;}
+.tl-dot{position:absolute;left:-2rem;top:.4rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 10px rgba(0,200,255,.5);transition:box-shadow .3s;}
+.tl-dot.gold{border-color:var(--gold);box-shadow:0 0 10px rgba(201,162,39,.45);}
+.tl-item:hover .tl-dot{box-shadow:0 0 18px rgba(0,200,255,.8);}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--accent);letter-spacing:.12em;margin-bottom:.3rem;}
+.tl-date.gold{color:var(--gold);}
+.tl-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.2rem;}
+.tl-org{color:var(--muted);font-size:.84rem;margin-bottom:.6rem;}
+.tl-desc{color:var(--muted2);font-size:.9rem;line-height:1.75;}
+.tl-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.7rem;}
+.tl-tag{font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.18rem .5rem;border-radius:4px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.2);color:#6699ff;}
+.tl-tag.military{background:rgba(201,162,39,.08);border-color:rgba(201,162,39,.2);color:var(--gold);}
+.medal{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--gold);background:rgba(201,162,39,.07);border:1px solid rgba(201,162,39,.18);padding:.22rem .6rem;border-radius:5px;margin-top:.5rem;margin-right:.4rem;font-family:'JetBrains Mono',monospace;}
+#projects{padding:7rem 5%;}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;margin-top:2rem;}
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;position:relative;overflow:hidden;transition:all .35s;}
+.project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));opacity:0;transition:opacity .3s;}
+.project-card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-6px);box-shadow:0 24px 50px rgba(0,0,0,.35);}
+.project-card:hover::before{opacity:1;}
+.project-num{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:.15em;margin-bottom:.7rem;}
+.project-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:.5rem;}
+.project-desc{color:var(--muted2);font-size:.88rem;line-height:1.75;margin-bottom:1.25rem;}
+.project-stack{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.25rem;}
+.stack-tag{font-family:'JetBrains Mono',monospace;font-size:.63rem;padding:.18rem .48rem;border-radius:4px;background:rgba(0,200,255,.05);border:1px solid rgba(0,200,255,.1);color:#7ab0cc;}
+.project-link{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--accent);text-decoration:none;transition:gap .2s;}
+.project-link:hover{gap:.65rem;}
+.project-link svg{width:13px;height:13px;}
+.wip-badge{position:absolute;top:1.2rem;right:1.2rem;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#f59e0b;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);padding:.18rem .48rem;border-radius:4px;letter-spacing:.1em;}
+.internal-badge{position:absolute;top:1.2rem;right:1.2rem;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--muted);background:rgba(86,98,117,.1);border:1px solid rgba(86,98,117,.2);padding:.18rem .48rem;border-radius:4px;letter-spacing:.1em;}
+#certifications{padding:7rem 5%;}
+.certs-filter{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:2rem;}
+.filter-btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.3rem .75rem;border-radius:20px;cursor:pointer;background:var(--surface);border:1px solid var(--border);color:var(--muted);transition:all .2s;}
+.filter-btn:hover,.filter-btn.active{background:rgba(0,200,255,.09);border-color:var(--accent);color:var(--accent);}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:.9rem;}
+.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem;transition:all .25s;display:flex;flex-direction:column;gap:.45rem;}
+.cert-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.cert-card.hidden{display:none;}
+.cert-issuer-row{display:flex;align-items:center;justify-content:space-between;}
+.cert-issuer{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.1em;}
+.cert-issuer.fiap{color:#e8386d;}.cert-issuer.alura{color:#00c7cf;}.cert-issuer.exercito{color:var(--gold);}.cert-issuer.saga{color:#a855f7;}
+.cert-date{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);}
+.cert-name{font-family:'Syne',sans-serif;font-weight:600;font-size:.9rem;line-height:1.3;}
+.cert-skills{display:flex;flex-wrap:wrap;gap:.28rem;margin-top:.2rem;}
+.cert-skill{font-size:.62rem;padding:.13rem .42rem;border-radius:3px;background:rgba(0,200,255,.04);border:1px solid rgba(0,200,255,.09);color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.gold-cert{border-color:rgba(201,162,39,.28);}
+.gold-cert .cert-name{color:var(--gold);}
+.gold-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--gold);background:rgba(201,162,39,.09);border:1px solid rgba(201,162,39,.2);padding:.13rem .42rem;border-radius:3px;display:inline-block;width:fit-content;}
+#contact{padding:7rem 5% 5rem;}
+.contact-inner{max-width:680px;text-align:center;margin:0 auto;}
+.contact-inner p{color:var(--muted2);line-height:1.85;margin-bottom:2.5rem;font-size:1rem;}
+.contact-links{display:flex;flex-wrap:wrap;gap:.85rem;justify-content:center;margin-bottom:3rem;}
+.contact-link{display:flex;align-items:center;gap:.55rem;padding:.65rem 1.3rem;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.75rem;transition:all .25s;}
+.contact-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,200,255,.1);}
+.contact-link svg{width:15px;height:15px;flex-shrink:0;}
+footer{border-top:1px solid var(--border);padding:1.75rem 5%;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);}
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;}.hero-photo{display:none;}
+  .about-grid{grid-template-columns:1fr;}.nav-links{display:none;}
+  footer{flex-direction:column;gap:.5rem;text-align:center;}
+  body{cursor:auto;}#cursor,#cursor-ring{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="progress"></div>
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="nav-logo">GE<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#about" data-pt="Sobre" data-en="About">Sobre</a></li>
+    <li><a href="#skills" data-pt="Skills" data-en="Skills">Skills</a></li>
+    <li><a href="#softskills" data-pt="Soft Skills" data-en="Soft Skills">Soft Skills</a></li>
+    <li><a href="#experience" data-pt="Trajetória" data-en="Journey">Trajetória</a></li>
+    <li><a href="#projects" data-pt="Projetos" data-en="Projects">Projetos</a></li>
+    <li><a href="#certifications" data-pt="Certs" data-en="Certs">Certs</a></li>
+    <li><a href="#contact" data-pt="Contato" data-en="Contact">Contato</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="lang-toggle">
+      <span class="lang-btn active" id="btnPT">PT</span>
+      <span class="lang-btn" id="btnEN">EN</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-content fade-up">
+      <div class="status-badge"><span class="status-dot"></span><span data-pt="Disponível para colaborações" data-en="Open to collaborations">Disponível para colaborações</span></div>
+      <div class="hero-tag" data-pt="Dev · Oficial do Exército · Cybersecurity" data-en="Dev · Army Officer · Cybersecurity">Dev · Oficial do Exército · Cybersecurity</div>
+      <h1 class="hero-name">Guilherme<br><span class="line2">Eustaquio</span></h1>
+      <div class="hero-title"><span class="typed" id="typedText"></span><span style="color:var(--accent);animation:blink 1s step-end infinite">▌</span></div>
+      <p class="hero-desc" data-pt="Estudante de ADS na FIAP e 2º Tenente do Exército Brasileiro. Combino disciplina e liderança militar com desenvolvimento web — criando soluções reais para a administração pública e explorando o universo de Cybersecurity." data-en="ADS student at FIAP and 2nd Lieutenant of the Brazilian Army. I combine military discipline and leadership with web development — building real solutions for public administration and exploring the Cybersecurity universe.">Estudante de ADS na FIAP e 2º Tenente do Exército Brasileiro. Combino disciplina e liderança militar com desenvolvimento web — criando soluções reais para a administração pública e explorando o universo de Cybersecurity.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary" data-pt="Ver Projetos" data-en="View Projects">Ver Projetos</a>
+        <a href="#contact" class="btn btn-outline" data-pt="Entre em Contato" data-en="Get in Touch">Entre em Contato</a>
+      </div>
+    </div>
+    <div class="hero-photo" id="photoArea">
+      <div class="corner corner-tl"></div><div class="corner corner-tr"></div><div class="corner corner-bl"></div><div class="corner corner-br"></div>
+      <img id="profileImg" alt="Guilherme Eustaquio"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span class="photo-hint" data-pt="Clique para adicionar foto" data-en="Click to add photo">Clique para adicionar foto</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label" data-pt="01 // SOBRE" data-en="01 // ABOUT">01 // SOBRE</p>
+    <h2 class="section-title" data-pt="Quem sou eu" data-en="Who I am">Quem sou eu</h2>
+    <div class="about-grid fade-up">
+      <div class="about-text">
+        <p data-pt="Sou <strong>Guilherme Eustaquio</strong>, 20 anos, São Paulo. Estudante de <strong>Análise e Desenvolvimento de Sistemas na FIAP</strong> e 2º Tenente do Exército Brasileiro, atuando na área da <strong>administração pública</strong>." data-en="I'm <strong>Guilherme Eustaquio</strong>, 20 years old, São Paulo. Student of <strong>Systems Analysis and Development at FIAP</strong> and 2nd Lieutenant of the Brazilian Army, working in the area of <strong>public administration</strong>.">Sou <strong>Guilherme Eustaquio</strong>, 20 anos, São Paulo. Estudante de <strong>Análise e Desenvolvimento de Sistemas na FIAP</strong> e 2º Tenente do Exército Brasileiro, atuando na área da <strong>administração pública</strong>.</p>
+        <p data-pt="Minha trajetória une duas frentes: a <strong>liderança e gestão</strong> forjadas na carreira militar e o <strong>desenvolvimento de software</strong> em constante evolução. Já construí ferramentas internas reais para o Exército e aplico boas práticas de engenharia em cada projeto." data-en="My journey combines two fronts: the <strong>leadership and management</strong> forged through a military career and <strong>software development</strong> in constant evolution. I've already built real internal tools for the Army and apply good engineering practices in every project.">Minha trajetória une duas frentes: a <strong>liderança e gestão</strong> forjadas na carreira militar e o <strong>desenvolvimento de software</strong> em constante evolução. Já construí ferramentas internas reais para o Exército e aplico boas práticas de engenharia em cada projeto.</p>
+        <p data-pt="Atualmente iniciando estudos em <strong>Cybersecurity</strong> — área que une minha mentalidade analítica e disciplinada com a segurança da informação, um dos setores mais relevantes da tecnologia atual." data-en="Currently starting studies in <strong>Cybersecurity</strong> — an area that combines my analytical and disciplined mindset with information security, one of the most relevant sectors in today's technology landscape.">Atualmente iniciando estudos em <strong>Cybersecurity</strong> — área que une minha mentalidade analítica e disciplinada com a segurança da informação, um dos setores mais relevantes da tecnologia atual.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><span class="stat-num" data-count="11">0</span><span class="stat-label" data-pt="Certificações" data-en="Certifications">Certificações</span></div>
+        <div class="stat-card"><span class="stat-num" data-count="3">0</span><span class="stat-label" data-pt="Projetos entregues" data-en="Projects delivered">Projetos entregues</span></div>
+        <div class="stat-card"><span class="stat-num">1°</span><span class="stat-label" data-pt="Colocação — Eng. CPOR-SP" data-en="Place — Engineering CPOR-SP">Colocação — Eng. CPOR-SP</span></div>
+        <div class="stat-card"><span class="stat-num" data-count="8">0</span><span class="stat-label" data-pt="Tecnologias & ferramentas" data-en="Technologies & tools">Tecnologias & ferramentas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <p class="section-label" data-pt="02 // HABILIDADES" data-en="02 // SKILLS">02 // HABILIDADES</p>
+    <h2 class="section-title" data-pt="Stack técnica" data-en="Technical Stack">Stack técnica</h2>
+    <div class="skills-grid fade-up">
+      <div class="skill-category">
+        <div class="skill-cat-title">🌐 Frontend</div>
+        <div class="skill-tags"><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">JavaScript</span><span class="skill-tag">React</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">Vite</span><span class="skill-tag">Figma</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">⚙️ <span data-pt="Backend & Dados" data-en="Backend & Data">Backend & Dados</span></div>
+        <div class="skill-tags"><span class="skill-tag">Node.js</span><span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">PHP</span><span class="skill-tag">SQLite</span><span class="skill-tag">REST APIs</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">🤖 IA & <span data-pt="Automação" data-en="Automation">Automação</span></div>
+        <div class="skill-tags"><span class="skill-tag">Watson Assistant (IBM)</span><span class="skill-tag">Node-RED</span><span class="skill-tag">Chatbots</span><span class="skill-tag learning">IA Generativa ✦</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">🛠️ DevOps & Tools</div>
+        <div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">UML</span><span class="skill-tag">Figma</span><span class="skill-tag">Versionamento</span></div>
+      </div>
+      <div class="skill-category" style="border-color:rgba(0,200,255,.22);">
+        <div class="cyber-badge">⚡ <span data-pt="iniciando estudos" data-en="starting studies">iniciando estudos</span></div>
+        <div class="skill-cat-title">🔐 Cybersecurity</div>
+        <div class="skill-tags"><span class="skill-tag learning" data-pt="Fundamentos de Segurança" data-en="Security Fundamentals">Fundamentos de Segurança</span><span class="skill-tag learning" data-pt="Redes & Protocolos" data-en="Networks & Protocols">Redes & Protocolos</span><span class="skill-tag learning">VLAN / Spanning Tree</span><span class="skill-tag learning">IPv4</span><span class="skill-tag learning" data-pt="Ameaças Cibernéticas" data-en="Cyber Threats">Ameaças Cibernéticas</span></div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-title">🎖️ <span data-pt="Gestão Pública" data-en="Public Management">Gestão Pública</span></div>
+        <div class="skill-tags"><span class="skill-tag" data-pt="Licitações públicas" data-en="Public bidding">Licitações públicas</span><span class="skill-tag" data-pt="Gestão de contratos" data-en="Contract management">Gestão de contratos</span><span class="skill-tag" data-pt="Governança pública" data-en="Public governance">Governança pública</span><span class="skill-tag" data-pt="Gestão financeira" data-en="Financial management">Gestão financeira</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOFT SKILLS -->
+<section id="softskills">
+  <div class="section-inner">
+    <p class="section-label" data-pt="03 // SOFT SKILLS" data-en="03 // SOFT SKILLS">03 // SOFT SKILLS</p>
+    <h2 class="section-title" data-pt="Além do código" data-en="Beyond the code">Além do código</h2>
+    <p class="softskills-intro fade-up" data-pt="Minha formação vai muito além de linguagens de programação. A trajetória militar moldou atributos que carrego para cada projeto: visão estratégica, calma sob pressão e responsabilidade com resultados reais." data-en="My background goes far beyond programming languages. The military journey shaped attributes I bring to every project: strategic vision, calm under pressure, and accountability for real results.">Minha formação vai muito além de linguagens de programação. A trajetória militar moldou atributos que carrego para cada projeto: visão estratégica, calma sob pressão e responsabilidade com resultados reais.</p>
+    <div class="radar-wrap fade-up"><canvas id="radarChart"></canvas></div>
+    <div class="softskills-grid fade-up">
+      <div class="soft-card">
+        <div class="soft-icon">🧭</div>
+        <div class="soft-title" data-pt="Liderança Situacional" data-en="Situational Leadership">Liderança Situacional</div>
+        <div class="soft-desc" data-pt="Comandei pelotões com militares de diferentes graduações no EIPOT. Aprendi a adaptar o estilo de liderança ao contexto e à equipe." data-en="I commanded platoons with soldiers of different ranks at EIPOT. I learned to adapt my leadership style to the context and team.">Comandei pelotões com militares de diferentes graduações no EIPOT. Aprendi a adaptar o estilo de liderança ao contexto e à equipe.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> EIPOT · CPOR-SP</div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon">🎯</div>
+        <div class="soft-title" data-pt="Foco sob Pressão" data-en="Focus under Pressure">Foco sob Pressão</div>
+        <div class="soft-desc" data-pt="Tomada de decisão em situações de alta pressão e recursos limitados. Clareza e priorização em cenários críticos." data-en="Decision-making in high-pressure situations with limited resources. Clarity and prioritization in critical scenarios.">Tomada de decisão em situações de alta pressão e recursos limitados. Clareza e priorização em cenários críticos.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> <span data-pt="Serviço Ativo" data-en="Active Service">Serviço Ativo</span></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon">🔄</div>
+        <div class="soft-title" data-pt="Adaptabilidade" data-en="Adaptability">Adaptabilidade</div>
+        <div class="soft-desc" data-pt="Transição entre engenharia militar, administração pública e tecnologia com fluidez e entrega consistente." data-en="Transitioning between military engineering, public administration and technology with fluidity and consistent delivery.">Transição entre engenharia militar, administração pública e tecnologia com fluidez e entrega consistente.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> <span data-pt="Toda a trajetória" data-en="Entire journey">Toda a trajetória</span></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon">🤝</div>
+        <div class="soft-title" data-pt="Colaboração & Camaragem" data-en="Collaboration & Camaraderie">Colaboração & Camaragem</div>
+        <div class="soft-desc" data-pt="Trabalho eficaz em equipes multidisciplinares — de projetos universitários a instruções conduzidas com tropa fardada." data-en="Effective work in multidisciplinary teams — from university projects to instructions conducted with uniformed troops.">Trabalho eficaz em equipes multidisciplinares — de projetos universitários a instruções conduzidas com tropa fardada.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> CPOR-SP · FIAP</div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon">📐</div>
+        <div class="soft-title" data-pt="Disciplina & Organização" data-en="Discipline & Organization">Disciplina & Organização</div>
+        <div class="soft-desc" data-pt="Gestão de prazos, processos e prioridades com rigor. Formação que exige excelência na execução e comprometimento com resultados." data-en="Managing deadlines, processes and priorities with rigor. Training that demands excellence in execution and commitment to results.">Gestão de prazos, processos e prioridades com rigor. Formação que exige excelência na execução e comprometimento com resultados.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> <span data-pt="Carreira Militar" data-en="Military Career">Carreira Militar</span></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon">💡</div>
+        <div class="soft-title" data-pt="Iniciativa & Proatividade" data-en="Initiative & Proactivity">Iniciativa & Proatividade</div>
+        <div class="soft-desc" data-pt="Identifico problemas e construo soluções sem esperar permissão — como o sistema interno de contratos desenvolvido por iniciativa própria." data-en="I identify problems and build solutions without waiting for permission — like the internal contract system built on my own initiative.">Identifico problemas e construo soluções sem esperar permissão — como o sistema interno de contratos desenvolvido por iniciativa própria.</div>
+        <div class="soft-origin"><span class="accent" data-pt="Forjado em:" data-en="Forged in:">Forjado em:</span> <span data-pt="Adm. Pública · Projetos" data-en="Public Admin · Projects">Adm. Pública · Projetos</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <p class="section-label" data-pt="04 // TRAJETÓRIA" data-en="04 // JOURNEY">04 // TRAJETÓRIA</p>
+    <h2 class="section-title" data-pt="Experiência" data-en="Experience">Experiência</h2>
+    <div class="timeline fade-up">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2025 — <span data-pt="presente" data-en="present">presente</span></div>
+        <div class="tl-title" data-pt="2º Tenente — Oficial Combatente Temporário de Engenharia" data-en="2nd Lieutenant — Temporary Combat Engineer Officer">2º Tenente — Oficial Combatente Temporário de Engenharia</div>
+        <div class="tl-org" data-pt="Exército Brasileiro · Administração Pública · Promovido em 31/08/2025" data-en="Brazilian Army · Public Administration · Promoted 31/08/2025">Exército Brasileiro · Administração Pública · Promovido em 31/08/2025</div>
+        <div class="tl-desc" data-pt="Atuação na área de administração pública, com gestão de processos administrativos, licitações e contratos governamentais. Desenvolvimento de ferramentas internas em React e Node.js para otimizar processos da seção." data-en="Working in public administration, managing administrative processes, government bidding and contracts. Development of internal tools in React and Node.js to optimize the section's workflows.">Atuação na área de administração pública, com gestão de processos administrativos, licitações e contratos governamentais. Desenvolvimento de ferramentas internas em React e Node.js para otimizar processos da seção.</div>
+        <div class="tl-tags"><span class="tl-tag military">Exército Brasileiro</span><span class="tl-tag military">Adm. Pública</span><span class="tl-tag">React</span><span class="tl-tag">Node.js</span><span class="tl-tag">SQLite</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date gold">2025</div>
+        <div class="tl-title" data-pt="Estágio de Instrução e Preparação para Oficiais Temporários (EIPOT)" data-en="Instruction & Preparation Internship for Temporary Officers (EIPOT)">Estágio de Instrução e Preparação para Oficiais Temporários (EIPOT)</div>
+        <div class="tl-org">2º BECmb "Borba Gato" — Pindamonhangaba/SP</div>
+        <div class="tl-desc" data-pt="Comandante de Pelotão de Engenharia — liderança direta de Subtenentes, Sargentos, Cabos e Soldados. Planejamento e condução de instruções militares e operações de campo." data-en="Engineering Platoon Commander — direct leadership of Warrant Officers, Sergeants, Corporals and Soldiers. Planning and conducting military instructions and field operations.">Comandante de Pelotão de Engenharia — liderança direta de Subtenentes, Sargentos, Cabos e Soldados. Planejamento e condução de instruções militares e operações de campo.</div>
+        <div class="tl-tags"><span class="tl-tag military">Comando de Pelotão</span><span class="tl-tag military">Liderança</span><span class="tl-tag military">Ops. de Engenharia</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date gold">2024</div>
+        <div class="tl-title" data-pt="Formação Oficial da Reserva R/2 — Arma de Engenharia" data-en="Reserve Officer Training R/2 — Engineering Corps">Formação Oficial da Reserva R/2 — Arma de Engenharia</div>
+        <div class="tl-org">CPOR-SP — <span data-pt="Centro de Preparação de Oficiais da Reserva de São Paulo" data-en="Reserve Officer Preparation Center of São Paulo">Centro de Preparação de Oficiais da Reserva de São Paulo</span></div>
+        <div class="tl-desc" data-pt="1º colocado do Curso de Engenharia. Explosivos, técnicas de transposição, pontes Bailey, reconhecimento de terreno e liderança de tropa em campo." data-en="1st place in the Engineering Course. Explosives, crossing techniques, Bailey bridges, terrain reconnaissance and troop leadership in the field.">1º colocado do Curso de Engenharia. Explosivos, técnicas de transposição, pontes Bailey, reconhecimento de terreno e liderança de tropa em campo.</div>
+        <span class="medal">🏅 Medalha Solar dos Andradas</span><span class="medal">🏆 Prêmio Correia Lima</span>
+        <div class="tl-tags" style="margin-top:.7rem"><span class="tl-tag military">1º Colocado</span><span class="tl-tag military">Engenharia Militar</span><span class="tl-tag military">Liderança</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2024 — <span data-pt="presente" data-en="present">presente</span></div>
+        <div class="tl-title" data-pt="Análise e Desenvolvimento de Sistemas" data-en="Systems Analysis and Development">Análise e Desenvolvimento de Sistemas</div>
+        <div class="tl-org">FIAP — <span data-pt="Centro Universitário, São Paulo" data-en="University Center, São Paulo">Centro Universitário, São Paulo</span></div>
+        <div class="tl-desc" data-pt="Graduação em ADS com foco em desenvolvimento web, engenharia de software, redes, IA e projetos práticos." data-en="Degree in ADS focusing on web development, software engineering, networks, AI and practical projects.">Graduação em ADS com foco em desenvolvimento web, engenharia de software, redes, IA e projetos práticos.</div>
+        <span class="gold-label" style="margin-top:.5rem;display:inline-block;">⭐ GOLD CERTIFIED — Análise de Sistemas e Prototipação Web</span>
+        <div class="tl-tags" style="margin-top:.65rem"><span class="tl-tag">React</span><span class="tl-tag">Python</span><span class="tl-tag">Java</span><span class="tl-tag">Redes</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <p class="section-label" data-pt="05 // PROJETOS" data-en="05 // PROJECTS">05 // PROJETOS</p>
+    <h2 class="section-title" data-pt="O que construí" data-en="What I've built">O que construí</h2>
+    <div class="projects-grid fade-up">
+      <div class="project-card">
+        <span class="internal-badge">INTERNAL</span>
+        <div class="project-num">PROJECT_01</div>
+        <div class="project-title" data-pt="Sistema de Gestão de Contratos" data-en="Contract Management System">Sistema de Gestão de Contratos</div>
+        <div class="project-desc" data-pt="Aplicação web para o Exército Brasileiro — rastreamento do fluxo de contratos governamentais, termos aditivos, apostilamentos e garantias. Desenvolvida para uso real na administração pública." data-en="Web application for the Brazilian Army — tracking government contract flows, additive terms, endorsements and guarantees. Built for real use in public administration.">Aplicação web para o Exército Brasileiro — rastreamento do fluxo de contratos governamentais, termos aditivos, apostilamentos e garantias. Desenvolvida para uso real na administração pública.</div>
+        <div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">TypeScript</span><span class="stack-tag">Node.js</span><span class="stack-tag">SQLite</span><span class="stack-tag">REST API</span></div>
+      </div>
+      <div class="project-card">
+        <span class="wip-badge">WIP</span>
+        <div class="project-num">PROJECT_02</div>
+        <div class="project-title">Central do Bem</div>
+        <div class="project-desc" data-pt="Plataforma de gestão e comunicação para a Turma do Bem — organização que oferece tratamento odontológico gratuito a jovens em vulnerabilidade social." data-en="Management and communication platform for Turma do Bem — an organization offering free dental treatment to socially vulnerable youth.">Plataforma de gestão e comunicação para a Turma do Bem — organização que oferece tratamento odontológico gratuito a jovens em vulnerabilidade social.</div>
+        <div class="project-stack"><span class="stack-tag">React</span><span class="stack-tag">TypeScript</span><span class="stack-tag">Node.js</span></div>
+        <a href="https://github.com/guilhermeeustaquio/Challenge" target="_blank" class="project-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.79 1.29 3.47.99.11-.77.42-1.29.76-1.59-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span data-pt="Ver no GitHub" data-en="View on GitHub">Ver no GitHub</span> →
+        </a>
+      </div>
+      <div class="project-card">
+        <span class="wip-badge" data-pt="EM BREVE" data-en="COMING SOON">EM BREVE</span>
+        <div class="project-num">PROJECT_03</div>
+        <div class="project-title" data-pt="Projeto GS" data-en="GS Project">Projeto GS</div>
+        <div class="project-desc" data-pt="Detalhes em breve. Repositório disponível no GitHub." data-en="Details coming soon. Repository available on GitHub.">Detalhes em breve. Repositório disponível no GitHub.</div>
+        <div class="project-stack"><span class="stack-tag">GitHub</span></div>
+        <a href="https://github.com/guilhermeeustaquio/GS" target="_blank" class="project-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.79 1.29 3.47.99.11-.77.42-1.29.76-1.59-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span data-pt="Ver no GitHub" data-en="View on GitHub">Ver no GitHub</span> →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-inner">
+    <p class="section-label" data-pt="06 // CERTIFICAÇÕES" data-en="06 // CERTIFICATIONS">06 // CERTIFICAÇÕES</p>
+    <h2 class="section-title" data-pt="Licenças & Certificados" data-en="Licenses & Certificates">Licenças & Certificados</h2>
+    <div class="certs-filter">
+      <button class="filter-btn active" data-filter="all" data-pt="Todos" data-en="All">Todos</button>
+      <button class="filter-btn" data-filter="fiap">FIAP</button>
+      <button class="filter-btn" data-filter="alura">Alura</button>
+      <button class="filter-btn" data-filter="exercito" data-pt="Exército" data-en="Army">Exército</button>
+      <button class="filter-btn" data-filter="saga">SAGA</button>
+    </div>
+    <div class="certs-grid fade-up">
+      <div class="cert-card gold-cert" data-category="fiap"><div class="cert-issuer-row"><span class="cert-issuer fiap">FIAP</span><span class="cert-date">dez / 2025</span></div><div class="cert-name">Qualificação Profissional — Análise de Sistemas e Prototipação Web</div><span class="gold-label">⭐ GOLD CERTIFIED</span></div>
+      <div class="cert-card" data-category="exercito"><div class="cert-issuer-row"><span class="cert-issuer exercito">Exército Brasileiro</span><span class="cert-date">abr / 2026</span></div><div class="cert-name">Estágio de Redes de Computadores</div><div class="cert-skills"><span class="cert-skill">Redes</span><span class="cert-skill">VLAN</span><span class="cert-skill">IPv4</span><span class="cert-skill">Spanning Tree</span></div></div>
+      <div class="cert-card" data-category="alura"><div class="cert-issuer-row"><span class="cert-issuer alura">Alura</span><span class="cert-date">mar / 2026</span></div><div class="cert-name">React: Projeto Full Stack</div><div class="cert-skills"><span class="cert-skill">JavaScript</span><span class="cert-skill">React</span></div></div>
+      <div class="cert-card" data-category="alura"><div class="cert-issuer-row"><span class="cert-issuer alura">Alura</span><span class="cert-date">fev / 2026</span></div><div class="cert-name">Cibersegurança: Fundamentos e Práticas Integradas</div><div class="cert-skills"><span class="cert-skill">Seg. da Informação</span><span class="cert-skill">Ameaças</span></div></div>
+      <div class="cert-card" data-category="fiap"><div class="cert-issuer-row"><span class="cert-issuer fiap">FIAP</span><span class="cert-date">fev / 2026</span></div><div class="cert-name">Gestão Financeira de Empresas</div></div>
+      <div class="cert-card" data-category="fiap"><div class="cert-issuer-row"><span class="cert-issuer fiap">FIAP</span><span class="cert-date">fev / 2026</span></div><div class="cert-name">Java Development</div><div class="cert-skills"><span class="cert-skill">Java</span><span class="cert-skill">Programação Lógica</span></div></div>
+      <div class="cert-card" data-category="exercito"><div class="cert-issuer-row"><span class="cert-issuer exercito">Exército Brasileiro</span><span class="cert-date">out / 2025</span></div><div class="cert-name">Estágio Setorial de Aquisições, Licitações e Contratos</div><div class="cert-skills"><span class="cert-skill">Contratos</span><span class="cert-skill">Licitação</span><span class="cert-skill">Adm. Pública</span></div></div>
+      <div class="cert-card" data-category="fiap"><div class="cert-issuer-row"><span class="cert-issuer fiap">FIAP</span><span class="cert-date">set / 2025</span></div><div class="cert-name">Engenharia de Software</div><div class="cert-skills"><span class="cert-skill">UML</span><span class="cert-skill">Práticas de Eng.</span></div></div>
+      <div class="cert-card" data-category="alura"><div class="cert-issuer-row"><span class="cert-issuer alura">Alura</span><span class="cert-date">ago / 2025</span></div><div class="cert-name">Começando em Programação: Carreira e Primeiros Passos</div></div>
+      <div class="cert-card" data-category="fiap"><div class="cert-issuer-row"><span class="cert-issuer fiap">FIAP</span><span class="cert-date">ago / 2025</span></div><div class="cert-name">Formação Social e Sustentabilidade</div><div class="cert-skills"><span class="cert-skill">Sustentabilidade</span></div></div>
+      <div class="cert-card" data-category="saga"><div class="cert-issuer-row"><span class="cert-issuer saga">Escola SAGA</span><span class="cert-date">out / 2022</span></div><div class="cert-name">Saga Curso Start — Design & 3D</div><div class="cert-skills"><span class="cert-skill">Photoshop</span><span class="cert-skill">Illustrator</span><span class="cert-skill">3D</span><span class="cert-skill">Motion</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner fade-up">
+      <p class="section-label" style="justify-content:center" data-pt="07 // CONTATO" data-en="07 // CONTACT">07 // CONTATO</p>
+      <h2 class="section-title" data-pt="Vamos conversar" data-en="Let's talk">Vamos conversar</h2>
+      <p data-pt="Aberto a projetos, colaborações e oportunidades. Seja em desenvolvimento, automação, cybersecurity ou na interseção entre tecnologia e gestão pública — manda um oi." data-en="Open to projects, collaborations and opportunities. Whether in development, automation, cybersecurity or at the intersection of technology and public management — reach out.">Aberto a projetos, colaborações e oportunidades. Seja em desenvolvimento, automação, cybersecurity ou na interseção entre tecnologia e gestão pública — manda um oi.</p>
+      <div class="contact-links">
+        <a href="mailto:guilhermepeustaquio@gmail.com" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Gmail</a>
+        <a href="https://www.linkedin.com/in/guilhermeeustaquio" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.48-.91 1.64-1.86 3.37-1.86 3.6 0 4.27 2.37 4.27 5.46v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a>
+        <a href="https://github.com/guilhermeeustaquio" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.79 1.29 3.47.99.11-.77.42-1.29.76-1.59-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>GitHub</a>
+        <a href="https://wa.me/5511972321329" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.67-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.59-.49-.5-.68-.51h-.58c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.27.48 1.7.62.72.23 1.37.19 1.88.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.28-.2-.58-.35zM12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.1 1.52 5.82L0 24l6.35-1.66A11.94 11.94 0 0012 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.82a9.8 9.8 0 01-5.03-1.38l-.36-.21-3.73.98.99-3.65-.23-.38A9.83 9.83 0 012.18 12C2.18 6.55 6.55 2.18 12 2.18c5.45 0 9.82 4.37 9.82 9.82 0 5.45-4.37 9.82-9.82 9.82z"/></svg>WhatsApp</a>
+        <a href="https://www.instagram.com/guilhermepeustaquio/" target="_blank" class="contact-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.43.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38a3.7 3.7 0 01-1.38.9c-.43.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.43-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38a3.7 3.7 0 011.38-.9c.43-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.87 5.87 0 00-2.12 1.39A5.87 5.87 0 00.63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.06 1.27.26 2.15.56 2.91a5.87 5.87 0 001.39 2.12 5.87 5.87 0 002.12 1.39c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24c3.26 0 3.67-.01 4.95-.07 1.27-.06 2.15-.26 2.91-.56a5.87 5.87 0 002.12-1.39 5.87 5.87 0 001.39-2.12c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.06-1.27-.26-2.15-.56-2.91a5.87 5.87 0 00-1.39-2.12A5.87 5.87 0 0019.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32A6.16 6.16 0 0012 5.84zM12 16a4 4 0 110-8 4 4 0 010 8zm6.4-11.85a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Guilherme Eustaquio</span>
+  <span data-pt="Desenvolvido com HTML · CSS · JS" data-en="Built with HTML · CSS · JS">Desenvolvido com HTML · CSS · JS</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// CURSOR
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar);})();
+document.querySelectorAll('a,button,.project-card,.soft-card,.stat-card,.skill-tag,.cert-card,.hero-photo').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+
+// PARTICLES
+const cvs=document.getElementById('particles'),c=cvs.getContext('2d');
+let W,H,pts=[];
+function rsz(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+for(let i=0;i<75;i++)pts.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.4+.3,a:Math.random()*.8+.1});
+(function dp(){
+  c.clearRect(0,0,W,H);
+  pts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    c.beginPath();c.arc(p.x,p.y,p.r,0,Math.PI*2);c.fillStyle=`rgba(0,200,255,${p.a*.5})`;c.fill();
+    pts.slice(i+1).forEach(q=>{const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<110){c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.strokeStyle=`rgba(0,200,255,${(1-d/110)*.07})`;c.stroke();}});
+  });
+  requestAnimationFrame(dp);
+})();
+
+// SCROLL PROGRESS
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+
+// TYPEWRITER
+const phrases={pt:['Desenvolvedor Web','Estudante de ADS — FIAP','2º Tenente do Exército','Iniciando em Cybersecurity'],en:['Web Developer','ADS Student — FIAP','2nd Lieutenant, Army','Starting in Cybersecurity']};
+let lang='pt',pi=0,ci=0,dl=false;
+const ty=document.getElementById('typedText');
+function type(){const p=phrases[lang][pi];if(!dl){ty.textContent=p.slice(0,++ci);if(ci===p.length){dl=true;setTimeout(type,1800);return;}}else{ty.textContent=p.slice(0,--ci);if(ci===0){dl=false;pi=(pi+1)%phrases[lang].length;}}setTimeout(type,dl?55:95);}
+type();
+
+// LANGUAGE
+function setLang(l){lang=l;pi=0;ci=0;dl=false;document.documentElement.setAttribute('data-lang',l);document.getElementById('btnPT').classList.toggle('active',l==='pt');document.getElementById('btnEN').classList.toggle('active',l==='en');document.querySelectorAll('[data-pt],[data-en]').forEach(el=>{const v=el.getAttribute('data-'+l);if(v)el.innerHTML=v;});drawRadar(l);}
+document.getElementById('btnPT').addEventListener('click',()=>setLang('pt'));
+document.getElementById('btnEN').addEventListener('click',()=>setLang('en'));
+
+// CERT FILTER
+document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;document.querySelectorAll('.cert-card').forEach(c=>c.classList.toggle('hidden',f!=='all'&&c.dataset.category!==f));});});
+
+// COUNTER
+function animCount(el,t){let n=0;const iv=setInterval(()=>{n=Math.min(n+Math.ceil(t/40),t);el.textContent=n;if(n>=t)clearInterval(iv);},35);}
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const n=parseInt(e.target.dataset.count);if(!isNaN(n)){animCount(e.target,n);}}});},{threshold:.5}).observe&&document.querySelectorAll('[data-count]').forEach(el=>{new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animCount(e.target,parseInt(e.target.dataset.count));}});},{threshold:.5}).observe(el);});
+
+// SCROLL REVEAL
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.08});
+document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+
+// NAV ACTIVE
+const secs=document.querySelectorAll('section[id]'),navA=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{let cur='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id;});navA.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));});
+
+// PHOTO UPLOAD
+document.getElementById('photoArea').addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=document.getElementById('profileImg');img.src=ev.target.result;img.classList.add('loaded');document.querySelector('.hero-photo svg').style.display='none';document.querySelector('.photo-hint').style.display='none';};r.readAsDataURL(f);};inp.click();});
+
+// RADAR
+const radarLabels={pt:['Liderança','Foco sob Pressão','Adaptabilidade','Colaboração','Disciplina','Iniciativa'],en:['Leadership','Under Pressure','Adaptability','Collaboration','Discipline','Initiative']};
+let rc=null;
+function drawRadar(l='pt'){if(rc)rc.destroy();rc=new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:radarLabels[l],datasets:[{data:[95,90,88,85,97,88],backgroundColor:'rgba(0,200,255,.07)',borderColor:'rgba(0,200,255,.65)',pointBackgroundColor:'var(--accent)',pointBorderColor:'transparent',pointRadius:4,borderWidth:1.5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:60,max:100,ticks:{display:false},grid:{color:'rgba(0,200,255,.07)'},pointLabels:{color:'#8fa0b8',font:{family:"'JetBrains Mono',monospace",size:11}},angleLines:{color:'rgba(0,200,255,.05)'}}}}});}
+drawRadar();
+</script>
+</body>
+</html>
