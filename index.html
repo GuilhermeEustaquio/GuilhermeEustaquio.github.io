@@ -528,7 +528,7 @@ document.getElementById('photoArea').addEventListener('click',()=>{const inp=doc
 // RADAR
 const radarLabels={pt:['Liderança','Foco sob Pressão','Adaptabilidade','Colaboração','Disciplina','Iniciativa'],en:['Leadership','Under Pressure','Adaptability','Collaboration','Discipline','Initiative']};
 let rc=null;
-function drawRadar(l='pt'){if(rc)rc.destroy();rc=new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:radarLabels[l],datasets:[{data:[95,90,88,85,97,88],backgroundColor:'rgba(0,200,255,.07)',borderColor:'rgba(0,200,255,.65)',pointBackgroundColor:'var(--accent)',pointBorderColor:'transparent',pointRadius:4,borderWidth:1.5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:60,max:100,ticks:{display:false},grid:{color:'rgba(0,200,255,.07)'},pointLabels:{color:'#8fa0b8',font:{family:"'JetBrains Mono',monospace",size:11}},angleLines:{color:'rgba(0,200,255,.05)'}}}}});}
+function drawRadar(l='pt'){if(rc)rc.destroy();rc=new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:radarLabels[l],datasets:[{data:[99,99,100,99,99,99],backgroundColor:'rgba(0,200,255,.07)',borderColor:'rgba(0,200,255,.65)',pointBackgroundColor:'var(--accent)',pointBorderColor:'transparent',pointRadius:4,borderWidth:1.5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:60,max:100,ticks:{display:false},grid:{color:'rgba(0,200,255,.07)'},pointLabels:{color:'#8fa0b8',font:{family:"'JetBrains Mono',monospace",size:11}},angleLines:{color:'rgba(0,200,255,.05)'}}}}});}
 drawRadar();
 </script>
 </body>
